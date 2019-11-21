@@ -22,15 +22,19 @@ const HeaderWrapper = styled.div`
 
 const CloseBtn = styled.a`
   position: relative;
-  height: 24px;
-  width: 24px;
+  height: 40px;
+  width: 60px;
+  border-radius: 4px;
   cursor: pointer;
+  transition: 0.3s ease-in-out;
+
   &:before {
     content: "";
     position: absolute;
-    top: 12px;
+    top: 19px;
+    right: 6px;
     height: 2px;
-    width: 100%;
+    width: 24px;
     background-color: #000;
     transform: rotate(45deg);
     border-radius: 2px;
@@ -39,12 +43,33 @@ const CloseBtn = styled.a`
   &:after {
     content: "";
     position: absolute;
-    top: 12px;
+    top: 19px;
+    right: 6px;
     height: 2px;
-    width: 100%;
+    width: 24px;
     background-color: #000;
     transform: rotate(-45deg);
     border-radius: 2px;
+  }
+
+  &:hover {
+    background: -o-linear-gradient(
+      260.92deg,
+      #ac32e4 0%,
+      #7918f2 47.87%,
+      #4801ff 100%
+    );
+    background: linear-gradient(
+      189.08deg,
+      #ac32e4 0%,
+      #7918f2 47.87%,
+      #4801ff 100%
+    );
+    &:before,
+    &:after {
+      background-color: #f1f1f1;
+      transition: 0.3s ease-in-out;
+    }
   }
 `;
 
