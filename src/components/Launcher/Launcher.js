@@ -33,27 +33,19 @@ const LauncherWrapper = styled.div`
     border-radius: 50%;
     transition: box-shadow 0.2s ease-in-out;
   }
+
+  & .opened {
+    transform: rotate(-360deg);
+    opacity: 1;
+  }
 `;
 
 class Launcher extends Component {
-  state = {
-    chatOpen: false
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = { chatOpen: true };
-  }
-
-  onClickOpenChat = e => {
-    this.setState({ chatOpen: !this.state.chatOpen });
-  };
-
   render() {
     return (
       <LauncherWrapper
-        chatOpen={this.state.chatOpen}
-        onClick={this.onClickOpenChat}
+        chatOpen={this.props.chatOpen}
+        onClick={this.props.handleOnClickOpenChat}
       ></LauncherWrapper>
     );
   }

@@ -1,6 +1,5 @@
 import React, { PureComponent as Component } from "react";
 import styled from "styled-components";
-import img from "./cat.svg";
 
 const AvatarWrapper = styled.div`
   border-radius: 50%;
@@ -10,16 +9,9 @@ const AvatarWrapper = styled.div`
 
 class Avatar extends Component {
   render() {
-    // const avatar = this.props.avatar;
-
-    const avatar = {
-      img: img,
-      description: "KOTE"
-    };
-
     return (
-      <AvatarWrapper>
-        <img src={avatar.img} alt={avatar.description} />
+      <AvatarWrapper onClick={this.props.handleOnClickOpenChat}>
+        <img src={this.props.img} alt={this.props.description} />
       </AvatarWrapper>
     );
   }
