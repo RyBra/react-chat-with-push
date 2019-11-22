@@ -22,7 +22,7 @@ const LauncherWrapper = styled.div`
   bottom: 25px;
   border-radius: 50%;
   box-shadow: none;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: 0.3s ease-in-out;
 
   &:before {
     content: "";
@@ -31,12 +31,15 @@ const LauncherWrapper = styled.div`
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    transition: box-shadow 0.2s ease-in-out;
+    transition: 0.3s ease-in-out;
   }
 
-  & .opened {
+  &.sc-open-icon {
     transform: rotate(-360deg);
-    opacity: 1;
+  }
+
+  &.sc-closed-icon {
+    transform: rotate(360deg);
   }
 `;
 
@@ -44,6 +47,7 @@ class Launcher extends Component {
   render() {
     return (
       <LauncherWrapper
+        className={this.props.chatOpen ? "sc-open-icon" : "sc-closed-icon"}
         chatOpen={this.props.chatOpen}
         onClick={this.props.handleOnClickOpenChat}
       ></LauncherWrapper>

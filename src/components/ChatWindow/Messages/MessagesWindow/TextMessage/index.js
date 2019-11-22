@@ -60,10 +60,9 @@ class TextMessage extends Component {
   render() {
     return (
       <Fragment>
-        <TextMessageWrapper recived={false}>
-          Сообщение клиента
+        <TextMessageWrapper recived={this.props.recived}>
+          {this.props.msgText}
         </TextMessageWrapper>
-        <TextMessageWrapper recived={true}>Ответ от бота</TextMessageWrapper>
       </Fragment>
     );
   }

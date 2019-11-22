@@ -20,19 +20,36 @@ const ChatWindowWrapper = styled.div`
   transition: 0.3s ease-in-out;
   border-radius: 10px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  &.closed {
+    opacity: 0;
+    visibility: hidden;
+    bottom: 90px;
+  }
 `;
 
 class ChatWindow extends Component {
   render() {
     const { handleOnClickOpenChat } = this.props;
     return (
-      <ChatWindowWrapper>
+      <ChatWindowWrapper className={this.props.chatOpen ? "opened" : "closed"}>
         <Header
           handleOnClickOpenChat={handleOnClickOpenChat}
           chatName="VitaCat"
         ></Header>
-        <MessagesWindow></MessagesWindow>
-        <MessageInput placeholder="Сообщение"></MessageInput>
+
+        <MessagesWindow
+          messages={this.props.messages}
+          chatOpen={this.props.chatOpen}
+        ></MessagesWindow>
+
+        <MessageInput
+          new_message={this.props.new_message}
+          handleSendMessage={this.props.handleSendMessage}
+          updateInputValue={this.props.updateInputValue}
+          handleKeyDown={this.props.handleKeyDown}
+          placeholder="Сообщение"
+        ></MessageInput>
       </ChatWindowWrapper>
     );
   }

@@ -1,7 +1,7 @@
 import React, { PureComponent as Component } from "react";
 import styled from "styled-components";
 
-const MessageInputWrapper = styled.form`
+const MessageInputWrapper = styled.div`
   min-height: 55px;
   margin: 0px;
   position: relative;
@@ -47,6 +47,7 @@ const Button = styled.button`
   justify-content: center;
   border: none;
   border-left: 1px solid #f1f1f1;
+  outline: transparent;
   svg {
     fill: #686b79;
     height: 20px;
@@ -65,9 +66,14 @@ const Button = styled.button`
 class MessageInput extends Component {
   render() {
     return (
-      <MessageInputWrapper>
-        <Input placeholder={this.props.placeholder}></Input>
-        <Button>
+      <MessageInputWrapper onKeyDown={this.props.handleKeyDown}>
+        <Input
+          placeholder={this.props.placeholder}
+          value={this.props.new_message.message}
+          onChange={() => {}}
+          onInput={this.props.updateInputValue}
+        ></Input>
+        <Button onClick={this.props.handleSendMessage}>
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"

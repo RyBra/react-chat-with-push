@@ -10,7 +10,7 @@ const AvatarWrapper = styled.div`
 class Avatar extends Component {
   render() {
     return (
-      <AvatarWrapper onClick={this.props.handleOnClickOpenChat}>
+      <AvatarWrapper>
         <img src={this.props.img} alt={this.props.description} />
       </AvatarWrapper>
     );

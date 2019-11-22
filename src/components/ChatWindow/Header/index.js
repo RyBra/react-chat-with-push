@@ -83,7 +83,7 @@ class Header extends Component {
           description={"Vitacat"}
         ></Avatar>
         <ChatName chatName={this.props.chatName}></ChatName>
-        <CloseBtn href="#kek"></CloseBtn>
+        <CloseBtn onClick={this.props.handleOnClickOpenChat}></CloseBtn>
       </HeaderWrapper>
     );
   }
