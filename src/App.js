@@ -4,7 +4,7 @@ import Launcher from "./components/Launcher";
 import { messaging } from "./init-fcm";
 
 const URL =
-  window.location.host !== "localhost:3000"
+  window.location.protocol !== "http:"
     ? `wss://${window.location.host}/ws/vitacat/chat/`
     : `ws://${window.location.host}/ws/vitacat/chat/`;
 
