@@ -46,13 +46,16 @@ const LauncherWrapper = styled.div`
     position: absolute;
     top: -8px;
     left: -4px;
-    background-color: red;
+    background-color: #e82a2a;
+    color: #fff;
     border-radius: 50%;
     height: 24px;
     width: 24px;
     font-size: 12px;
+    font-weight: bold;
     line-height: 24px;
     text-align: center;
+    box-shadow: 1px 1px 6px 1px rgba(153, 153, 153, 0.4);
   }
 `;
 

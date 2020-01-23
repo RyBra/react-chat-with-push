@@ -86,7 +86,6 @@ class App extends Component {
           fcmToken: token,
           csrfmiddlewaretoken: csrfmiddlewaretoken
         };
-        console.log(fcmToken);
         fetch(
           `${window.location.protocol}//${window.location.host}/api/v1/app/user/fbt/`,
           {
@@ -97,9 +96,7 @@ class App extends Component {
             },
             body: JSON.stringify(fcmToken)
           }
-        )
-          .then(response => response.json())
-          .then(result => console.log(result));
+        );
       })
       .catch(function(err) {
         console.log("Unable to get permission to notify.", err);
@@ -204,7 +201,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state.new_messages_count);
     return (
       <div>
         <ChatWindow
