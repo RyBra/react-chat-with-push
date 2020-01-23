@@ -1,11 +1,23 @@
 import React, { PureComponent as Component } from "react";
 import ChatWindow from "./components/ChatWindow";
 import Launcher from "./components/Launcher";
+import { messaging } from "./init-fcm";
 
 const URL =
   window.location.host !== "localhost:3000"
     ? `wss://${window.location.host}/ws/vitacat/chat/`
-    : `ws://localhost:8000/ws/vitacat/chat/`;
+    : `ws://${window.location.host}/ws/vitacat/chat/`;
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("./firebase-messaging-sw.js")
+    .then(function(registration) {
+      console.log("Registration successful, scope is:", registration.scope);
+    })
+    .catch(function(err) {
+      console.log("Service worker registration failed, error:", err);
+    });
+}
 
 class App extends Component {
   ws = new WebSocket(URL);
@@ -18,7 +30,9 @@ class App extends Component {
         recived: false,
         message: ""
       },
-      messages: []
+      messages: [],
+      notification: false,
+      new_messages_count: -1
     };
   }
 
@@ -27,10 +41,14 @@ class App extends Component {
 
     this.ws.onmessage = evt => {
       const message = JSON.parse(evt.data);
+
       this.setState({
         messages: Array.isArray(message)
           ? [...this.state.messages, ...message]
-          : [...this.state.messages, message]
+          : [...this.state.messages, message],
+        new_messages_count: this.state.chatOpen
+          ? 0
+          : this.state.new_messages_count + 1
       });
     };
 
@@ -40,6 +58,72 @@ class App extends Component {
         ws: new WebSocket(URL)
       });
     };
+
+    messaging
+      .requestPermission()
+      .then(async function() {
+        function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== "") {
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === name + "=") {
+                cookieValue = decodeURIComponent(
+                  cookie.substring(name.length + 1)
+                );
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        }
+
+        const token = await messaging.getToken();
+        const csrfmiddlewaretoken = getCookie("csrftoken");
+        let fcmToken = {
+          fcmToken: token,
+          csrfmiddlewaretoken: csrfmiddlewaretoken
+        };
+        console.log(fcmToken);
+        fetch(
+          `${window.location.protocol}//${window.location.host}/api/v1/app/user/fbt/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfmiddlewaretoken
+            },
+            body: JSON.stringify(fcmToken)
+          }
+        )
+          .then(response => response.json())
+          .then(result => console.log(result));
+      })
+      .catch(function(err) {
+        console.log("Unable to get permission to notify.", err);
+      });
+
+    navigator.serviceWorker.addEventListener("message", message => {
+      let notification = message.data.firebaseMessaging.payload.notification;
+      let newMessage = {
+        recived: true,
+        message: notification.body
+      };
+
+      this.setState({
+        messages: [...this.state.messages, newMessage],
+        notification: this.state.chatOpen ? false : true,
+        new_messages_count: this.state.chatOpen
+          ? 0
+          : this.state.new_messages_count + 1
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    navigator.serviceWorker.removeEventListener("message");
   }
 
   // state = {
@@ -77,7 +161,10 @@ class App extends Component {
   // };
 
   onClickOpenChat = e => {
-    this.setState({ chatOpen: !this.state.chatOpen });
+    this.setState({
+      chatOpen: !this.state.chatOpen,
+      notification: false
+    });
   };
 
   sendMessage = message => {
@@ -117,6 +204,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.state.new_messages_count);
     return (
       <div>
         <ChatWindow
@@ -131,6 +219,8 @@ class App extends Component {
         <Launcher
           chatOpen={this.state.chatOpen}
           handleOnClickOpenChat={this.onClickOpenChat}
+          notification={this.state.notification}
+          new_messages_count={this.state.new_messages_count}
         ></Launcher>
       </div>
     );

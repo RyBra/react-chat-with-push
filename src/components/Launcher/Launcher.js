@@ -41,16 +41,39 @@ const LauncherWrapper = styled.div`
   &.sc-closed-icon {
     transform: rotate(360deg);
   }
+
+  .new-message {
+    position: absolute;
+    top: -8px;
+    left: -4px;
+    background-color: red;
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+  }
 `;
 
 class Launcher extends Component {
   render() {
+    let {
+      chatOpen,
+      handleOnClickOpenChat,
+      notification,
+      new_messages_count
+    } = this.props;
     return (
       <LauncherWrapper
-        className={this.props.chatOpen ? "sc-open-icon" : "sc-closed-icon"}
-        chatOpen={this.props.chatOpen}
-        onClick={this.props.handleOnClickOpenChat}
-      ></LauncherWrapper>
+        className={chatOpen ? "sc-open-icon" : "sc-closed-icon"}
+        chatOpen={chatOpen}
+        onClick={handleOnClickOpenChat}
+      >
+        {notification && (
+          <div className="new-message">{new_messages_count}</div>
+        )}
+      </LauncherWrapper>
     );
   }
 }
